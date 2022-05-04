@@ -2,10 +2,16 @@
 
 namespace App\Repository;
 
+use App\Entity\AgeRestrictions;
+use App\Entity\Genre;
 use App\Entity\Movies;
+use App\Entity\Quality;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,9 +24,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MoviesRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $em;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, Movies::class);
+        $this->em = $em;
     }
 
     /**
@@ -45,6 +54,55 @@ class MoviesRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function getAll(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('g.title', 'g.id', 'g.active')
+            ->where('g.active = 1')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function getAllWithJoin(): array
+    {
+        $movies = $this->createQueryBuilder('m')
+
+            ->innerJoin(Genre::class, 'g', 'WITH', 'm.genre_id = g.id')
+            ->select('m, g.id, g.title, g.active')
+            ->getQuery()
+            ->getArrayResult();
+
+//        $res = array();
+//
+//        for ($i = 0; $i < sizeof($movies); $i += 2) {
+//            $res[] = array_merge($movies[$i], $movies[$i + 1]);
+//        }
+        //dd($movies);
+        return $movies;
+    }
+
+    public function getOneWithJoin($id): array
+    {
+        $movies = $this->createQueryBuilder('m')
+
+            ->innerJoin(Genre::class, 'g', 'WITH', 'm.genre_id = g.id')
+            ->innerJoin(Quality::class, 'q', 'WITH', 'm.quality = q.id')
+            ->innerJoin(AgeRestrictions::class, 'a', 'WITH', 'm.age_restriction = a.id')
+            ->select('m, q, a, g')
+            ->where('m.active = 1 AND m.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getScalarResult();
+
+//        $res = array();
+//
+//        for ($i = 0; $i < sizeof($movies); $i += 2) {
+//            $res[] = array_merge($movies[$i], $movies[$i + 1]);
+//        }
+        //dd($movies);
+        return $movies;
     }
 
     // /**

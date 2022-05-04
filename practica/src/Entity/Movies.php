@@ -24,9 +24,9 @@ class Movies
     /**
      * @var string|null
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $name;
+    private $title;
 
     /**
      * @var string
@@ -47,7 +47,7 @@ class Movies
      *
      * @ORM\Column(name="genre_id", type="integer", nullable=false)
      */
-    private $genreId;
+    private $genre_id;
 
     /**
      * @var string
@@ -56,19 +56,49 @@ class Movies
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $release_year;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $running_time;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $country;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $short_summary;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quality;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $age_restriction;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -99,12 +129,12 @@ class Movies
 
     public function getGenreId(): ?int
     {
-        return $this->genreId;
+        return $this->genre_id;
     }
 
     public function setGenreId(int $genreId): self
     {
-        $this->genreId = $genreId;
+        $this->genre_id = $genreId;
 
         return $this;
     }
@@ -117,6 +147,78 @@ class Movies
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getReleaseYear(): ?int
+    {
+        return $this->release_year;
+    }
+
+    public function setReleaseYear(int $release_year): self
+    {
+        $this->release_year = $release_year;
+
+        return $this;
+    }
+
+    public function getRunningTime(): ?int
+    {
+        return $this->running_time;
+    }
+
+    public function setRunningTime(int $running_time): self
+    {
+        $this->running_time = $running_time;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getShortSummary(): ?string
+    {
+        return $this->short_summary;
+    }
+
+    public function setShortSummary(string $short_summary): self
+    {
+        $this->short_summary = $short_summary;
+
+        return $this;
+    }
+
+    public function getQuality(): ?int
+    {
+        return $this->quality;
+    }
+
+    public function setQuality(int $quality): self
+    {
+        $this->quality = $quality;
+
+        return $this;
+    }
+
+    public function getAgeRestriction(): ?int
+    {
+        return $this->age_restriction;
+    }
+
+    public function setAgeRestriction(int $age_restriction): self
+    {
+        $this->age_restriction = $age_restriction;
 
         return $this;
     }

@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Genre;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class GenreCrudController extends AbstractCrudController
 {
@@ -12,14 +15,14 @@ class GenreCrudController extends AbstractCrudController
         return Genre::class;
     }
 
-    /*
+
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->hideOnForm(),
             TextField::new('title'),
-            TextEditorField::new('description'),
+            BooleanField::new("active")->hideOnForm()
         ];
     }
-    */
+
 }
